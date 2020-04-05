@@ -5,10 +5,20 @@ services:
     # Run a node in development mode with the name "machine".
     # -client makes consul listen to every available network
     # interface. This allows you to make curl calls to consul.
-    command: agent -dev -node machine -client 0.0.0.0
+    command: agent -dev -enable-script-checks -node machine -client 0.0.0.0 -config-dir=./consul.d
     # network_mode: host
+    volumes:
+      - ./consul.d:/consul.d
     environment:
       CONSUL_BIND_INTERFACE: eth0
+      CONSUL_CLIENT_INTERFACE: eth0
     ports:
       - 127.0.0.1:8500:8500/tcp
-      - 127.0.0.1:8600:8600/tcp
+      - 127.0.0.1:8600:8600/udp
+  # socat:
+  #   image: alpine/socat:1.7.3.4-r0
+  #   command: tcp-listen:8181,fork exec:"/bin/cat"
+  #   ports:
+  #     - 127.0.0.1:8181:8181
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
