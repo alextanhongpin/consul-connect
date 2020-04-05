@@ -43,3 +43,18 @@ $ curl localhost:8500/v1/catalog/service/web
     }
 }
 ```
+
+## Connect Proxy
+
+Note: The example works when running a local consul `brew install consul`, but not on the one running docker.
+
+```bash
+$ socat -v tcp-l:8181,fork exec:"/bin/cat"
+$ nc 127.0.0.1 8181
+
+$ consul connect proxy -sidecar-for socat
+$ consul connect proxy -sidecar-for web
+
+# Calling 9191 now proxies to 8181.
+$ nc 127.0.0.1 9191
+```
