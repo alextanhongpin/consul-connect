@@ -1,9 +1,10 @@
 up:
 	@docker-compose up -d
-down:
+
+down: cleanup
 	@docker-compose down
 
-restart: down cleanup up
+restart: down up
 
 consul-%:
 	docker exec -it $(shell docker-compose ps -q consul) consul $*
