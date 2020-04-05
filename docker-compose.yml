@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  consul:
+    image: consul:1.7.2
+    # Run a node in development mode with the name "machine".
+    # -client makes consul listen to every available network
+    # interface. This allows you to make curl calls to consul.
+    command: agent -dev -node machine -client 0.0.0.0
+    # network_mode: host
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+    ports:
+      - 127.0.0.1:8500:8500/tcp
+      - 127.0.0.1:8600:8600/tcp
